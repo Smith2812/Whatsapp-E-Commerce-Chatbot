@@ -58,10 +58,78 @@ Install the necessary Python packages <br>
 - Get a Twilio Phone Number:
 - After logging in, navigate to the Phone Numbers section in the Twilio console.
 - Click on Get a Number and follow the prompts to purchase a number.
-Set Up Messaging:
-Click on your purchased phone number in the Phone Numbers section.
-In the Messaging section, locate the A MESSAGE COMES IN field.
-Set the Webhook URL to the Ngrok URL (see Ngrok section below), appending /bot to the end, like so:
+- **Set Up Messaging**
+- Click on your purchased phone number in the Phone Numbers section.
+- In the Messaging section, locate the A MESSAGE COMES IN field.
+- Set the Webhook URL to the Ngrok URL (see Ngrok section below), appending /bot to the end, like so:
+   ``` arduino
+   https://<ngrok-id>.ngrok.io/bot
+- Make sure the HTTP method is set to POST.
+
+## Running the Application
+
+1. **Run the Flask Application**<br>
+In the terminal, execute the following command to start the Flask server:<br>
+The application will run on http://127.0.0.1:5000.
+   ```bash
+   python app.py
+
+2. Expose the Application Using Ngrok
+
+- Open a new terminal window and navigate to the directory where you extracted Ngrok.
+- Run the following command to expose your Flask application:
+
+  ```bash
+   ngrok http 5000
+- Ngrok will provide a public URL that tunnels to your local server. Copy this URL for use in your Twilio configuration.
+
+3. Update Twilio Webhook:
+- Go back to your Twilio console and update the "Webhook URL" for your phone number with the public URL provided by Ngrok, appending /bot to the end, like so:
+   ```bash
+   https://<ngrok-id>.ngrok.io/bot
+
+### Interacting with the Chatbot
+1. Send a message to your Twilio phone number to initiate the chatbot conversation.
+2. Use the options provided by the chatbot to browse products, check order status, or contact support.
+### API Endpoints
+1. GET /payment/<product_id>: Renders the payment page for a specific product.
+2. POST /complete_order: Completes the order and stores the order details in the database.
+3. POST /bot: Handles incoming messages from Twilio and manages user interactions.
+
+### Database Schema
+#### Products Table Structure
+
+| Column Name | Data Type  |
+|-------------|------------|
+| id          | VARCHAR2   |
+| name        | VARCHAR2   |
+| price       | NUMBER     |
+| image_url   | VARCHAR2   |
+| category    | VARCHAR2   |
+
+#### Order Data Table Structure
+
+| Column Name    | Data Type  |
+|----------------|------------|
+| id             | VARCHAR2   |
+| user_phone     | VARCHAR2   |
+| product_id     | VARCHAR2   |
+| payment_method | VARCHAR2   |
+| address        | VARCHAR2   |
+| status         | VARCHAR2   |
+
+#### User Sessions Table Structure
+
+| Column Name | Data Type  |
+|-------------|------------|
+| phone       | VARCHAR2   |
+| state       | VARCHAR2   |
+
+
+
+   
+
+
 
 
 
